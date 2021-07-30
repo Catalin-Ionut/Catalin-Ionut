@@ -3,8 +3,9 @@
 ![PHP](https://img.shields.io/badge/PHP-Expert-orange)
 ![CleanCode](https://img.shields.io/badge/CleanCode-Expert-blue)
 ![DevOps](https://img.shields.io/badge/DevOps-Intermediate-lightgrey)
+![visitors](https://visitor-badge.glitch.me/badge?page_id=catalin.ionut.titov)
 
-- 🔭 I’m currently working at [eMAG](https://emag.ro/)
+- 🔭 I’m currently working at [Valantic](https://www.valantic.com/)
 - 💬 Ask me about PHP
 - 📫 How to reach me: [Facebook](https://www.facebook.com/catalin.ionut/) or [LinkedIn](https://www.linkedin.com/in/catalintitov/)
 - ⚡ Fun fact: I am seriously into lifting heavy.
@@ -16,4 +17,4 @@
 
 ### 📚 Looking for my Resume? E-Mail me!
 
-![Catalin Ionut's github stats](https://github-readme-stats.vercel.app/api?username=catalin-ionut&show_icons=true&hide_border=true)
+![Catalin Ionut's github stats](https://github-readme-stats.vercel.app/api?username=catalin-ionut&show_icons=true&hide_border=true&theme=gotham)

@@ -8,6 +8,8 @@ Step by step guide on my way to becoming a modern backend developer.
 ----
 #### *Certifications*
 - [X] [Zend Certified Engineer](https://www.zend-zce.com/en/yellow-pages/ZEND028556)
+- [x] Shopware 6 Certified Developer
+- [x] Shopware 6 Certified Advanced Developer
 - [x] [Scrum Master](https://www.scrum.org/user/205324)
 - [x] [Scrum Developer](https://www.scrum.org/user/205324)
 - [ ] Certified Kubernetes Application Developer
@@ -23,7 +25,7 @@ Step by step guide on my way to becoming a modern backend developer.
 - [ ] VueJS / React
 ----
 #### *Version control*
-- [x] Git (GitHub, Stash)
+- [x] Git (GitHub, Stash, Gitlab)
 ----
 #### *Static Analysis*
 - [X] PHPStan
@@ -93,7 +95,7 @@ Step by step guide on my way to becoming a modern backend developer.
 - [X] Docker Sync
 - [x] Podman
 - [X] Minikube
-- [ ] Kubernetes
+- [X] Kubernetes
 - [ ] Docker Swarm
 ----
 #### *Cloud Providers*
