@@ -3,7 +3,6 @@
 ![PHP](https://img.shields.io/badge/PHP-Expert-orange)
 ![CleanCode](https://img.shields.io/badge/CleanCode-Expert-blue)
 ![DevOps](https://img.shields.io/badge/DevOps-Intermediate-lightgrey)
-![visitors](https://visitor-badge.glitch.me/badge?page_id=catalin.ionut.titov)
 
 - 🔭 I’m currently working at [Valantic](https://www.valantic.com/)
 - 💬 Ask me about PHP
