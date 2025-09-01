@@ -1,0 +1,13 @@
+- shell:
+#    - command: shell/scripts/mas.sh
+#      quiet: true
+    - command: shell/scripts/icons.sh
+      quiet: true
+    - command: shell/scripts/skills.sh
+      quiet: true
+    - command: shell/scripts/agents.sh
+      quiet: true
+    - command: shell/scripts/claude.sh
+      quiet: true
+    - command: shell/scripts/settings.sh
+      quiet: true

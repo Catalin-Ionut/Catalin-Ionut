@@ -1,0 +1,67 @@
+- tap:
+    - ddev/ddev
+
+- brew:
+    - jq
+    - gh
+    - uv
+    - fd
+    - bat
+    - git
+    - fzf
+    - lsd
+    - mas
+    - grc
+    - bun
+    - node
+    - tree
+    - ddev
+    - glow
+    - glab
+    - less
+    - wget
+    - lnav
+    - btop
+    - mole
+    - rsync
+    - rclone
+    - pandoc
+    - ripgrep
+    - composer
+    - fileicon
+    - starship
+    - topgrade
+    - git-crypt
+    - iproute2mac
+
+- cask:
+    - font-inter
+    - font-hack-nerd-font
+    - font-ubuntu-nerd-font
+    - font-meslo-lg-nerd-font
+    - font-fira-code-nerd-font
+    - font-inconsolata-nerd-font
+    - font-ubuntu-mono-nerd-font
+    - font-roboto-mono-nerd-font
+    - font-jetbrains-mono-nerd-font
+    - font-dejavu-sans-mono-nerd-font
+
+- cask:
+    - rcmd
+    - codex
+    - claude
+    - chatgpt
+    - discord
+    - orbstack
+    - menuwhere
+    - mediamate
+    - macwhisper
+    - maintenance
+    - istat-menus
+    - claude-code
+    - transmission
+    - betterdisplay
+    - bettertouchtool
+    - microsoft-teams
+    - openvpn-connect
+    - visual-studio-code
