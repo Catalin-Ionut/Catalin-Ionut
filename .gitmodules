@@ -1,0 +1,18 @@
+[submodule ".dotfiles/dotbot"]
+	path = .dotfiles/dotbot
+	url = https://github.com/anishathalye/dotbot
+[submodule ".dotfiles/dotbot-brew"]
+	path = .dotfiles/dotbot-brew
+	url = https://github.com/d12frosted/dotbot-brew
+[submodule ".dotfiles/dotbot-gitcrypt"]
+	path = .dotfiles/dotbot-gitcrypt
+	url = https://gitlab.com/gnfzdz/dotbot-gitcrypt.git
+[submodule ".dotfiles/dotbot-sync"]
+	path = .dotfiles/dotbot-sync
+	url = https://github.com/j1r1k/dotbot-sync
+[submodule ".dotfiles/dotbot-conditional"]
+	path = .dotfiles/dotbot-conditional
+	url = https://gitlab.com/gnfzdz/dotbot-conditional.git
+[submodule ".dotfiles/dotbot-sudo"]
+	path = .dotfiles/dotbot-sudo
+	url = https://github.com/DrDynamic/dotbot-sudo.git

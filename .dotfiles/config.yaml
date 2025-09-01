@@ -1,0 +1,129 @@
+- defaults:
+    sync:
+      create: true
+    create:
+      mode: 0700
+    shell:
+      quiet: true
+    link:
+      force: true
+      relink: true
+      create: true
+
+- clean: ['~']
+
+- create:
+    - ~/Sites
+    - ~/Developer
+    - ~/Applications
+
+- link:
+    ~/:
+      glob: true
+      path: zsh/.*
+
+- link:
+    ~/:
+      glob: true
+      path: git/.*
+
+- link:
+    ~/.config/btop:
+      glob: true
+      path: btop/*
+    ~/.config/starship.toml:
+      path: starship/starship.toml
+
+- tap:
+    - ddev/ddev
+
+- brew:
+    - jq
+    - gh
+    - bat
+    - git
+    - fzf
+    - lsd
+    - mas
+    - grc
+    - tree
+    - ddev
+    - glow
+    - less
+    - wget
+    - lnav
+    - btop
+    - trash
+    - gnupg
+    - rsync
+    - rclone
+    - pandoc
+    - composer
+    - starship
+    - git-crypt
+    - iproute2mac
+
+- cask:
+    - font-inter
+    - font-jetbrains-mono
+    - font-jetbrains-mono-nerd-font
+
+- cask:
+    # - keka
+    # - iina
+    # - clop
+    # - onyx
+    # - stats
+    # - batfi
+    # - lunar
+    # - orion
+    # - maccy
+    # - shottr
+    # - middle
+    # - alcove
+    # - spotify
+    # - discord
+    # - transmit
+    # - mediamate
+    # - alacritty
+    # - yellowdot
+    # - daisydisk
+    # - macwhisper
+    # - appcleaner
+    # - multitouch
+    # - hammerspoon
+    # - qbittorrent
+    # - virtualbuddy
+    # - startupfolder
+    # - rectangle-pro
+    # - betterdisplay
+    # - mac-mouse-fix
+    # - docker-desktop
+    # - openvpn-connect
+    # - microsoft-teams
+    - jetbrains-toolbox
+    - visual-studio-code
+
+- shell:
+    - command: git-crypt unlock "$HOME/.config/git-crypt/git-crypt.key"
+      description: Unlock git-crypt with exported key.
+
+- conditional:
+    if:
+      git-decrypted:
+        - ssh
+    then:
+      - sync:
+          ~/.ssh:
+            path: ssh
+            fmode: 600
+            dmode: 700
+
+- conditional:
+    if:
+      git-decrypted:
+        - etc
+    then:
+      - sudo:
+          sync:
+            /etc/hosts: etc/hosts
