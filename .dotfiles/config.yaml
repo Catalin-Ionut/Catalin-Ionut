@@ -1,0 +1,149 @@
+- defaults:
+    create:
+      mode: 0700
+    shell:
+      quiet: true
+    link:
+      force: true
+      relink: true
+      create: true
+    sync:
+      create: true
+
+- clean: ['~']
+
+- create:
+    - ~/Sites
+    - ~/Developer
+    - ~/Applications
+
+- link:
+    ~/:
+      glob: true
+      path: git/.*
+
+- link:
+    ~/:
+      glob: true
+      path: zsh/.*
+
+- link:
+    ~/.config/btop:
+      glob: true
+      path: btop/*
+
+- link:
+    ~/.config/starship.toml:
+      path: starship/starship.toml
+
+- tap:
+    - ddev/ddev
+
+- brew:
+    - jq
+    - gh
+    - bat
+    - git
+    - fzf
+    - lsd
+    - mas
+    - grc
+    - tree
+    - ddev
+    - glow
+    - less
+    - wget
+    - lnav
+    - btop
+    - gnupg
+    - rsync
+    - rclone
+    - pandoc
+    - composer
+    - starship
+    - git-crypt
+    - iproute2mac
+
+- cask:
+    - font-inter
+    - font-fira-code
+    - font-jetbrains-mono
+    - font-hack-nerd-font
+    - font-source-code-pro
+    - font-meslo-lg-nerd-font
+    - font-fira-code-nerd-font
+    - font-jetbrains-mono-nerd-font
+
+- cask:
+    - mos
+    # - keka
+    # - iina
+    # - clop
+    # - onyx
+    # - stats
+    # - batfi
+    # - lunar
+    - orion
+    # - maccy
+    # - shottr
+    - spotify
+    - discord
+    - chatgpt
+    # - transmit
+    - phpstorm
+    - mediamate
+    # - yellowdot
+    # - daisydisk
+    # - macwhisper
+    - appcleaner
+    - multitouch
+    # - hammerspoon
+    # - qbittorrent
+    - virtualbuddy
+    # - startupfolder
+    - betterdisplay
+    - docker-desktop
+    - openvpn-connect
+    - microsoft-teams
+    - visual-studio-code
+
+- shell:
+    - command: git-crypt unlock "$HOME/.config/git-crypt/git-crypt.key"
+      description: Unlock git-crypt with exported key.
+
+- shell:
+    - shell/mas.sh
+    - shell/settings.sh
+
+- conditional:
+    if:
+      git-decrypted:
+        - ssh
+    then:
+      - sync:
+          ~/.ssh:
+            path: ssh
+            fmode: 600
+            dmode: 700
+
+- git:
+    '~/Developer/bvb':
+      url: 'git@github.com:Catalin-Ionut/bvb.git'
+
+    '~/Developer/shopware':
+      url: 'ssh://git@gitlab.nxs360.com:2222/shopware/ddev/shopware.git'
+
+    '~/Developer/hartje':
+      url: 'ssh://git@gitlab.nxs360.com:2222/anonymous/shopware-6/hartje.git'
+
+    '~/Developer/template':
+      url: 'ssh://git@gitlab.nxs360.com:2222/shopware/templates/shopware.git'
+
+    '~/Developer/keycloak':
+      url: 'ssh://git@gitlab.nxs360.com:2222/anonymous/internal/keycloak.git'
+
+    '~/Developer/dockware':
+      url: 'ssh://git@gitlab.nxs360.com:2222/anonymous/shopware-6/dockware.git'
+
+    '~/Developer/stack':
+      url: 'ssh://git@gitlab.nxs360.com:2222/shopware/docker/valantic-stack.git'
