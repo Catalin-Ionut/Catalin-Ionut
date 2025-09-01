@@ -1,0 +1,26 @@
+{
+  "display": {
+    "showTools": false,
+    "showAgents": true,
+    "showTodos": true,
+    "showDuration": true,
+    "showConfigCounts": true,
+    "showSessionName": false,
+    "showProject": false,
+    "showUsage": true,
+    "showEffortLevel": true,
+    "customLine": "────────────────────────────────────────────────────────────────────────────────",
+    "customLinePosition": "last"
+  },
+  "gitStatus": {
+    "enabled": true,
+    "showDirty": false,
+    "showAheadBehind": false,
+    "showFileStats": false
+  },
+  "lineLayout": "compact",
+  "showSeparators": false,
+  "colors": {
+    "custom": "#191A1C"
+  }
+}
