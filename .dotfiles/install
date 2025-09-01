@@ -1,0 +1,215 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+################################################################################
+# Configuration
+################################################################################
+
+readonly BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+readonly DOTBOT_DIR="dotbot"
+readonly DOTBOT_BIN="bin/dotbot"
+readonly DOTBOT_CONFIG="config.yaml"
+readonly DOTBOT_PLUGINS=(
+    dotbot-brew/brew.py
+    dotbot-sync/sync.py
+    dotbot-conditional/conditional.py
+    dotbot-gitcrypt/gitcrypt.py
+)
+
+readonly ZAP_URL="https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh"
+readonly ZAP_BRANCH="release-v1"
+readonly ZAP_ENTRYPOINT="$HOME/.local/share/zap/zap.zsh"
+
+readonly BREW_URL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+readonly BREW_PREFIXES=(/opt/homebrew /usr/local)
+
+readonly CURRENT_USER="$(id -un)"
+
+readonly SUDOERS_DIR="/etc/sudoers.d"
+readonly SUDOERS_FILE="$SUDOERS_DIR/$CURRENT_USER"
+readonly SUDOERS_RULE="$CURRENT_USER ALL=(ALL) NOPASSWD: ALL"
+
+WORK_DIR=""
+
+################################################################################
+# Helpers
+################################################################################
+
+. "$BASEDIR/shell/helper.sh"
+
+cleanup() {
+    [[ -n "$WORK_DIR" && -d "$WORK_DIR" ]] && rm -rf -- "$WORK_DIR"
+    return 0
+}
+
+fetch() {
+    local url="$1" dest="$2"
+
+    curl --proto '=https' --tlsv1.2 -fsSL \
+        --connect-timeout 15 --retry 3 --retry-delay 2 \
+        -o "$dest" "$url" ||
+        die "failed to download $url"
+    [[ -s "$dest" ]] || die "downloaded an empty file from $url"
+}
+
+run_installer() {
+    local url="$1" interpreter="$2" filename="$3"
+    shift 3
+
+    local installer="$WORK_DIR/$filename"
+
+    fetch "$url" "$installer"
+    NONINTERACTIVE=1 "$interpreter" "$installer" ${@+"$@"}
+}
+
+################################################################################
+# Preflight
+################################################################################
+
+require_regular_user() {
+    [[ "${EUID:-$(id -u)}" -ne 0 ]] ||
+        die "run this as your own user, not as root or with sudo."
+}
+
+prime_sudo() {
+    sudo -n true 2>/dev/null && return
+
+    log "Requesting administrator access"
+    sudo -v || die "sudo access is required to continue."
+}
+
+################################################################################
+# Password-less sudo
+################################################################################
+
+setup_passwordless_sudo() {
+    log "Configuring password-less sudo for $CURRENT_USER"
+
+    if ! sudo grep -qxF "$SUDOERS_RULE" "$SUDOERS_FILE" 2>/dev/null; then
+        if [[ ! -d "$SUDOERS_DIR" ]]; then
+            info "creating $SUDOERS_DIR"
+            sudo mkdir -p "$SUDOERS_DIR"
+            sudo chmod 755 "$SUDOERS_DIR"
+        fi
+
+        install_sudoers_rule
+        info "enabled"
+    fi
+
+    assert_sudoers_included
+}
+
+install_sudoers_rule() {
+    local staged="$WORK_DIR/sudoers"
+    local pending="$SUDOERS_DIR/.$CURRENT_USER.pending"
+
+    printf '%s\n' "$SUDOERS_RULE" >"$staged"
+
+    sudo visudo -cqf "$staged" ||
+        die "refusing to install invalid sudoers rule: $SUDOERS_RULE"
+
+    sudo install -o root -g wheel -m 0440 "$staged" "$pending"
+    sudo mv -f "$pending" "$SUDOERS_FILE"
+}
+
+assert_sudoers_included() {
+    sudo grep -qE '^[[:space:]]*#includedir[[:space:]]+[^[:space:]]*/sudoers\.d[[:space:]]*$' /etc/sudoers ||
+        warn "/etc/sudoers has no '#includedir ... /sudoers.d' directive; $SUDOERS_FILE is ignored."
+}
+
+################################################################################
+# Zap (zsh plugin manager)
+################################################################################
+
+install_zap() {
+    log "Checking Zap"
+
+    [[ -f "$ZAP_ENTRYPOINT" ]] && return
+
+    info "installing from $ZAP_BRANCH"
+    run_installer "$ZAP_URL" /bin/zsh zap-install.zsh --branch "$ZAP_BRANCH"
+
+    [[ -f "$ZAP_ENTRYPOINT" ]] ||
+        die "Zap installer finished but $ZAP_ENTRYPOINT is missing."
+    info "installed"
+}
+
+################################################################################
+# Homebrew
+################################################################################
+
+install_homebrew() {
+    log "Checking Homebrew"
+
+    have brew && return
+
+    info "installing"
+    run_installer "$BREW_URL" /bin/bash brew-install.sh
+
+    load_brew_shellenv
+
+    have brew ||
+        die "Homebrew installed but 'brew' is not on PATH; open a new shell and re-run."
+    info "installed"
+}
+
+load_brew_shellenv() {
+    local prefix
+
+    for prefix in "${BREW_PREFIXES[@]}"; do
+        if [[ -x "$prefix/bin/brew" ]]; then
+            eval "$("$prefix/bin/brew" shellenv)"
+            return
+        fi
+    done
+}
+
+################################################################################
+# Dotbot
+################################################################################
+
+sync_submodules() {
+    log "Syncing submodules"
+    git -C "$DOTBOT_DIR" submodule sync --quiet --recursive
+    git submodule update --init --recursive
+}
+
+run_dotbot() {
+    local dotbot="$BASEDIR/$DOTBOT_DIR/$DOTBOT_BIN"
+    local plugin args=()
+
+    [[ -x "$dotbot" ]] || die "$dotbot is missing or not executable."
+    [[ -f "$DOTBOT_CONFIG" ]] || die "$DOTBOT_CONFIG not found in $BASEDIR."
+
+    for plugin in "${DOTBOT_PLUGINS[@]}"; do
+        args+=(-p "$plugin")
+    done
+
+    log "Running Dotbot"
+    "$dotbot" -c "$DOTBOT_CONFIG" -d "$BASEDIR" "${args[@]}" ${@+"$@"}
+}
+
+################################################################################
+# Main
+################################################################################
+
+main() {
+    require_regular_user
+
+    cd "$BASEDIR"
+
+    trap cleanup EXIT
+    WORK_DIR="$(mktemp -d)"
+
+    prime_sudo
+    setup_passwordless_sudo
+    install_zap
+    install_homebrew
+
+    sync_submodules
+    run_dotbot ${@+"$@"}
+}
+
+main ${@+"$@"}
