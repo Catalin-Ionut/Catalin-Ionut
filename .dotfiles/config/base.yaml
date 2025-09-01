@@ -1,0 +1,30 @@
+- defaults:
+    shell:
+      stdout: true
+    link:
+      force: true
+      relink: true
+      create: true
+    sync:
+      create: true
+
+- clean: ['~']
+
+- link:
+    ~/:
+      glob: true
+      path: zsh/.*
+
+- link:
+    ~/.config/starship.toml:
+      path: starship/starship.toml
+
+- link:
+    ~/.claude/agents/:
+      glob: true
+      path: claude/agents/*
+
+- link:
+    ~/.claude/skills/:
+      glob: true
+      path: claude/skills/*
