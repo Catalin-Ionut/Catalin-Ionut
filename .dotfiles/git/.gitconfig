@@ -1,0 +1,105 @@
+[user]
+    name = Catalin Ionut Titov
+    email = catalin.titov@cec.valantic.com
+    signingkey = $HOME/.ssh/id_rsa
+
+[github]
+    user = Catalin-Ionut
+
+[init]
+    defaultBranch = master
+
+[core]
+    editor = code
+    autocrlf = input
+    ignorecase = true
+    pager = bat --paging=always
+    excludesfile = ~/.gitignore
+
+[tag]
+    gpgSign = true
+
+[push]
+    default = simple
+    autoSetupRemote = true
+
+[pull]
+    rebase = true
+
+[fetch]
+    prune = true
+
+[http]
+    postBuffer = 1073741824
+
+[status]
+    short = true
+    branch = true
+    aheadBehind = true
+
+[color]
+    ui = auto
+
+[color "branch"]
+    current = "#FFC620"
+    local = "#FFD750"
+    remote = "#A0E521"
+
+[color "diff"]
+    meta = "#FFC620" bold
+    frag = "#8763B8" bold
+    old = "#FF301B" bold
+    new = "#A0E521" bold
+
+[color "status"]
+    added = "#A0E521"
+    changed = "#FFC620"
+    untracked = "#21DEEF"
+
+[color "diff-highlight"]
+    oldNormal = "#FF301B" bold
+    oldHighlight = "#FF4352" bold
+    newNormal = "#A0E521" bold
+    newHighlight = "#B8E466" bold
+
+[gpg]
+    format = ssh
+
+[merge]
+    ff = only
+    conflictstyle = diff3
+
+[format]
+    pretty = oneline
+
+[help]
+    autocorrect = prompt
+
+[rebase]
+    autosquash = true
+
+[pack]
+    threads = 0
+
+[alias]
+    lg = log -p
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    ri = rebase -i
+    df = diff --word-diff
+    cr = clone --recursive
+    unstage = reset --hard HEAD
+    contains = branch --contains
+    uncommit = reset --soft HEAD~1
+    brl = branch --sort=-committerdate
+    lm = log --pretty=format:'* %s (%h)'
+    stl = ls-files -m -o --exclude-standard
+    contrib = shortlog --summary --numbered
+    g = grep --break --heading --line-number
+    amend = commit --amend --reuse-message=HEAD
+    pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+    ld = "!sh -c \"git log --since '${1:-1} days ago' --oneline --author $(git config user.email)\" -"
+    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    nah = "!f() { git reset --hard; git clean -df; if [ -d \".git/rebase-apply\" ] || [ -d \".git/rebase-merge\" ]; then git rebase --abort; fi; }; f"

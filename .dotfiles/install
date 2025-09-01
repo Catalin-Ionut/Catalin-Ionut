@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Enable password-less sudo for the current user
+USERNAME="$(whoami)"
+SUDOERS_DIR="/etc/sudoers.d"
+SUDOERS_FILE="$SUDOERS_DIR/$USERNAME"
+
+# Ensure /etc/sudoers.d exists with correct permissions
+if [[ ! -d "$SUDOERS_DIR" ]]; then
+    echo "Creating $SUDOERS_DIR directory..."
+    sudo mkdir -p "$SUDOERS_DIR"
+    sudo chmod 755 "$SUDOERS_DIR"
+fi
+
+# Check if password-less sudo is already configured
+if sudo grep -qE "^$USERNAME ALL=\(ALL\) NOPASSWD: ALL$" "$SUDOERS_FILE" 2>/dev/null; then
+    echo "Password-less sudo already enabled for $USERNAME."
+else
+    echo "Password-less sudo not found. Enabling for $USERNAME..."
+    echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee "$SUDOERS_FILE" >/dev/null
+    sudo chmod 440 "$SUDOERS_FILE"
+    echo "Password-less sudo enabled successfully for $USERNAME."
+fi
+
+# Install Zap plugin manager if not already installed
+if [[ ! -f "$HOME/.local/share/zap/zap.zsh" ]]; then
+    echo "Zap plugin manager not found. Installing Zap..."
+    NONINTERACTIVE=1 /bin/zsh <(curl -fsSL https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+    echo "Zap installed successfully."
+else
+    echo "Zap plugin manager is already installed."
+fi
+
+# Install Homebrew if not already installed
+if ! command -v brew &>/dev/null; then
+    echo "Homebrew not found. Installing Homebrew..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "Homebrew installed successfully."
+
+    # Add Homebrew to PATH for the current script
+    if [[ -d "/opt/homebrew/bin" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -d "/usr/local/bin" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+else
+    echo "Homebrew is already installed."
+fi
+
+# DotBot Configuration
+CONFIG="config.yaml"
+DOTBOT_DIR="dotbot"
+DOTBOT_BIN="bin/dotbot"
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd "${BASEDIR}"
+git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
+git submodule update --init --recursive
+
+# Run DotBot with specified plugins
+"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -c "${CONFIG}" -d "${BASEDIR}" -p dotbot-brew/brew.py -p dotbot-sync/sync.py -p dotbot-gitcrypt/gitcrypt.py -p dotbot-conditional/conditional.py "${@}"

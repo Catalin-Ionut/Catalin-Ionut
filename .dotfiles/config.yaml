@@ -1,0 +1,128 @@
+- defaults:
+    create:
+      mode: 0700
+    shell:
+      quiet: true
+    link:
+      force: true
+      relink: true
+      create: true
+    sync:
+      create: true
+
+- clean: ['~']
+
+- link:
+    ~/:
+      glob: true
+      path: git/.*
+
+- link:
+    ~/:
+      glob: true
+      path: zsh/.*
+
+- link:
+    ~/.hammerspoon:
+      glob: true
+      path: spoon/*
+
+- link:
+    ~/.config/starship.toml:
+      path: starship/starship.toml
+
+- tap:
+    - ddev/ddev
+
+- brew:
+    - jq
+    - gh
+    - bat
+    - git
+    - fzf
+    - lsd
+    - mas
+    - grc
+    - tree
+    - ddev
+    - glow
+    - less
+    - wget
+    - lnav
+    - curl
+    - btop
+    - mole
+    - rsync
+    - rclone
+    - pandoc
+    - composer
+    - starship
+    - topgrade
+    - git-crypt
+    - iproute2mac
+
+- cask:
+    - font-inter
+    - font-fira-code
+    - font-jetbrains-mono
+    - font-hack-nerd-font
+    - font-ubuntu-nerd-font
+    - font-meslo-lg-nerd-font
+    - font-fira-code-nerd-font
+    - font-inconsolata-nerd-font
+    - font-ubuntu-mono-nerd-font
+    - font-roboto-mono-nerd-font
+    - font-jetbrains-mono-nerd-font
+    - font-dejavu-sans-mono-nerd-font
+
+- cask:
+    - iina
+    - keka
+    - orion
+    - batfi
+    - shottr
+    - deeper
+    - spotify
+    - discord
+    - antinote
+    - transmit
+    - phpstorm
+    - orbstack
+    - lookaway
+    - hiddenbar
+    - menuwhere
+    - mediamate
+    - crossover
+    - daisydisk
+    - macwhisper
+    - multitouch
+    - hammerspoon
+    - maintenance
+    - istat-menus
+    - virtualbuddy
+    - mac-mouse-fix
+    - betterdisplay
+    - microsoft-teams
+    - openvpn-connect
+    - visual-studio-code
+
+- shell:
+    - command: git-crypt unlock "$HOME/.config/git-crypt/git-crypt.key"
+      description: Unlock git-crypt with exported key.
+
+- shell:
+    - shell/mas.sh
+    - shell/settings.sh
+
+- conditional:
+    if:
+      git-decrypted:
+        - ssh
+    then:
+      - sync:
+          ~/.ssh:
+            path: ssh
+            fmode: 600
+            dmode: 700
+            options: []
+            create: true
