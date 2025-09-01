@@ -1,0 +1,4 @@
+.dotfiles/git/** filter=git-crypt diff=git-crypt
+.dotfiles/ssh/** filter=git-crypt diff=git-crypt
+.dotfiles/vpn/** filter=git-crypt diff=git-crypt
+.dotfiles/tideways/** filter=git-crypt diff=git-crypt

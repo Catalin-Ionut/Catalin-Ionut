@@ -1,0 +1,35 @@
+{
+  "name": "meter",
+  "version": "0.1.0",
+  "description": "Model, effort, context window and subscription usage at the bottom right of Claude Code, on the permission mode's row.",
+  "author": {
+    "name": "Catalin Ionut Titov"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "display": {
+      "type": "string",
+      "title": "Subscription windows",
+      "description": "both: the 5-hour and weekly windows side by side. session: only the 5-hour window. week: only the weekly window.",
+      "options": [
+        "both",
+        "session",
+        "week"
+      ],
+      "default": "both"
+    },
+    "hideCycleHint": {
+      "type": "boolean",
+      "title": "Hide the mode cycle hint",
+      "description": "Drop \"(shift+tab to cycle)\" after the permission mode, to leave room for the meter.",
+      "default": true
+    },
+    "hideInterruptHint": {
+      "type": "boolean",
+      "title": "Hide the interrupt hint",
+      "description": "Drop \"esc to interrupt\" from the hint line while Claude works, to leave room for the meter.",
+      "default": true
+    }
+  }
+}
